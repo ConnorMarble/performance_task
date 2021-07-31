@@ -1,7 +1,7 @@
-import React from "react";
-import { IUser } from "../../types";
-import { deleteUser } from "../../redux/userSlice";
-import { useAppDispatch } from "../../redux/hooks";
+import React from 'react';
+import { IUser } from '../../types';
+import { deleteUser } from '../../redux/userSlice';
+import { useAppDispatch } from '../../redux/hooks';
 
 interface IProps {
     user: IUser;

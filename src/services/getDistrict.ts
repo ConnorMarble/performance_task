@@ -1,10 +1,9 @@
-import { IDistrict } from "./../types";
-import axios from "axios";
+import { IDistrict } from '../types';
+import axios from 'axios';
 
-const getDistrict = (id: number): Promise<IDistrict[]> => {
-    return axios
-        .get<IDistrict[]>("districts.json")
-        .then((res) => res.data.filter((district) => district.id === id));
+const getDistrict = async (id: number): Promise<string | undefined> => {
+    const response = await axios.get<IDistrict[]>('districts.json');
+    return response.data.find((district) => district.id === id)?.name;
 };
 
 export default getDistrict;

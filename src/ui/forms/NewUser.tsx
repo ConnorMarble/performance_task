@@ -1,48 +1,193 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { addUser } from "../../redux/userSlice";
-import { IUser } from "../../types";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../../validation/yup.schema";
+import React from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { IUser, TSetNotify } from '../../types';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schema } from '../../validation/yup.schema';
+import { Grid, Box, makeStyles } from '@material-ui/core';
+import Form from './Form';
+import { Controls } from '../components/controls/Controls';
+import { useEffect } from 'react';
+import getDistricts from '../../services/getDistricts';
+import { setDistricts } from '../../redux/districtSlice';
+import { addUser } from '../../redux/userSlice';
+import getDistrict from '../../services/getDistrict';
 
-//////////WHEN I ADD NEW USER TO FILTER LAST PAGE IT DOESNT SHOW UP
+const useStyles = makeStyles(() => ({
+    root: {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column'
+    }
+}));
 
-const NewUserForm: React.FC = () => {
+interface IProps {
+    setOpenPopup: React.Dispatch<React.SetStateAction<boolean>>;
+    setNotify: TSetNotify;
+}
+
+const NewUserForm: React.FC<IProps> = ({ setOpenPopup, setNotify }: IProps) => {
+    const classes = useStyles();
     const dispatch = useAppDispatch();
-    const districtState = useAppSelector((state) => state.districts.districts);
+    const selectDistricts = useAppSelector(
+        (state) => state.districts.districts
+    );
     const {
-        register,
         handleSubmit,
         reset,
-        formState: { errors },
+        control,
+        formState: { errors }
     } = useForm({ resolver: yupResolver(schema) });
 
-    const onSubmit = (data: IUser) => {
-        dispatch(addUser(data));
-        reset();
+    const onSubmit = async (data: IUser) => {
+        try {
+            const districtName = await getDistrict(data.district);
+            if (districtName) {
+                const newUser = {
+                    ...data,
+                    districtName
+                };
+                dispatch(addUser(newUser));
+                setNotify({
+                    isOpen: true,
+                    message: 'User Added!',
+                    type: 'success'
+                });
+            }
+            reset();
+            setOpenPopup(false);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
+    useEffect(() => {
+        getDistricts().then((data) => dispatch(setDistricts(data)));
+    }, []);
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <input placeholder="first name" {...register("first_name")} />
-            <input
-                placeholder="middle initial"
-                {...register("middle_initial")}
-            />
-            <input placeholder="last name" {...register("last_name")} />
-            <input placeholder="email" {...register("email")} />
-            <input type="checkbox" {...register("active")} />
-            <select {...register("district")}>
-                {districtState.map((district) => (
-                    <option key={district.id} value={district.id}>
-                        {district.name}
-                    </option>
-                ))}
-            </select>
-            {errors.exampleRequired && <span>This field is required</span>}
-            <input type="submit" />
-        </form>
+        <Form>
+            <Box px={3} py={2} justifyItems="center" width="100%">
+                <Grid container spacing={1}>
+                    <Grid item xs={12} lg={12} className={classes.root}>
+                        <Controller
+                            name="first_name"
+                            control={control}
+                            render={({ field: { onChange, ref } }) => (
+                                <Controls.Input
+                                    defaultValue={''}
+                                    onChange={onChange}
+                                    inputRef={ref} // wire up the input ref
+                                    required
+                                    id="first_name"
+                                    name="first_name"
+                                    label="First Name"
+                                    fullWidth
+                                    error={errors.first_name?.message}
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="middle_initial"
+                            control={control}
+                            render={({ field: { onChange, ref } }) => (
+                                <Controls.Input
+                                    onChange={onChange}
+                                    inputRef={ref} // wire up the input ref
+                                    id="middle_initial"
+                                    name="middle_initial"
+                                    label="Middle Initial"
+                                    defaultValue={''}
+                                    fullWidth
+                                    error={errors.middle_initial?.message}
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="last_name"
+                            control={control}
+                            render={({ field: { onChange, ref } }) => (
+                                <Controls.Input
+                                    onChange={onChange}
+                                    inputRef={ref} // wire up the input ref
+                                    required
+                                    id="last_name"
+                                    name="last_name"
+                                    label="Last Name"
+                                    defaultValue={''}
+                                    fullWidth
+                                    error={errors.last_name?.message}
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="email"
+                            control={control}
+                            render={({ field: { onChange, ref } }) => (
+                                <Controls.Input
+                                    onChange={onChange}
+                                    inputRef={ref} // wire up the input ref
+                                    required
+                                    id="email"
+                                    name="email"
+                                    label="Email"
+                                    defaultValue={''}
+                                    fullWidth
+                                    error={errors.email?.message}
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="active"
+                            control={control}
+                            render={({ field: { onChange, value, ref } }) => (
+                                <Controls.Checkbox
+                                    label="Active"
+                                    name="active"
+                                    control={control}
+                                    checked={value}
+                                    onChange={onChange}
+                                    inputRef={ref} // wire up the input ref
+                                    id="active"
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="district"
+                            control={control}
+                            render={({ field: { onChange, value, ref } }) => (
+                                <Controls.Select
+                                    value={value}
+                                    onChange={onChange}
+                                    inputRef={ref} // wire up the input ref
+                                    required
+                                    id="district"
+                                    name="district"
+                                    label="District"
+                                    fullWidth
+                                    options={selectDistricts}
+                                    error={errors.district?.message}
+                                />
+                            )}
+                        />
+                    </Grid>
+                </Grid>
+                <Box
+                    mt={3}
+                    marginLeft="0"
+                    display="flex"
+                    justifyContent="flex-end"
+                >
+                    <Controls.Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSubmit(onSubmit)}
+                        text={'Submit'}
+                        type={'submit'}
+                    />
+                </Box>
+            </Box>
+        </Form>
     );
 };
 

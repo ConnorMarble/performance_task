@@ -1,50 +1,26 @@
-import { IUser } from "./../types";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import moment from "moment";
-import filterByDistrict from "../helpers/filterByDistrict";
-import filterByActive from "../helpers/filterByActive";
+import { IUser } from './../types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import moment from 'moment';
 
 const initialState: IUser[] = [];
-const initialState2: number[] = [];
 
 const userSlice = createSlice({
-    name: "users",
+    name: 'users',
     initialState: {
         users: initialState,
-        deleted: initialState2,
-        filtered: initialState,
         isFiltered: false,
         filterByActive: false,
-        district: 0,
+        district: '',
+        filterByDistrict: false
     },
     reducers: {
         setUsers: (state, action: PayloadAction<IUser[]>) => {
             state.users = action.payload;
-            state.users = state.users.filter(
-                (user) => state.deleted.indexOf(user.id) == -1
-            );
         },
         deleteUser: (state, action: PayloadAction<number>) => {
-            state.deleted = [...state.deleted, action.payload];
             state.users = state.users.filter(
                 (user) => user.id !== action.payload
             );
-        },
-        filterDistrict: (state) => {
-            let arr = state.users;
-            if (state.filterByActive) {
-                arr = filterByActive(arr);
-            }
-            arr = filterByDistrict(arr, state.district);
-            state.filtered = arr;
-        },
-        filterActiveUsers: (state) => {
-            let arr = state.users;
-            if (state.district > 0) {
-                arr = filterByDistrict(arr, state.district);
-            }
-            arr = filterByActive(arr);
-            state.filtered = arr;
         },
         addUser: (state, action: PayloadAction<IUser>) => {
             const {
@@ -54,6 +30,7 @@ const userSlice = createSlice({
                 email,
                 active,
                 district,
+                districtName
             } = action.payload;
             const newUser: IUser = {
                 id: state.users.length + 1,
@@ -63,32 +40,31 @@ const userSlice = createSlice({
                 email,
                 active,
                 district,
+                districtName,
                 verified: false,
-                created_at: moment().format("YYYY-MM-DD HH:mm:ss"),
+                created_at: moment().format('YYYY-MM-DD HH:mm:ss')
             };
             state.users = [...state.users, newUser];
         },
         setFilteredByActive: (state, action: PayloadAction<boolean>) => {
             state.filterByActive = action.payload;
         },
-        setDistrict: (state, action: PayloadAction<number>) => {
+        setDistrict: (state, action: PayloadAction<string>) => {
             state.district = action.payload;
         },
-        setIsFiltered: (state, action: PayloadAction<boolean>) => {
-            state.isFiltered = action.payload;
-        },
-    },
+        setFilteredByDistrict: (state, action: PayloadAction<boolean>) => {
+            state.filterByDistrict = action.payload;
+        }
+    }
 });
 
 export const {
     addUser,
     deleteUser,
-    filterActiveUsers,
-    filterDistrict,
+    setFilteredByDistrict,
     setDistrict,
-    setIsFiltered,
     setFilteredByActive,
-    setUsers,
+    setUsers
 } = userSlice.actions;
 
 export default userSlice.reducer;
