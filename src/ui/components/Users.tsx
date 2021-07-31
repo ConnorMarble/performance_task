@@ -8,6 +8,7 @@ import Table from './table/Table';
 import Notification from './Notification';
 import { Color } from '@material-ui/lab';
 import ConfirmDialog from './ConfirmDialog';
+import { useAppSelector } from '../../redux/hooks';
 
 const useStyles = makeStyles(() => ({
     pageContent: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles(() => ({
 
 const Users: React.FC = () => {
     const classes = useStyles();
+    const selectSelected = useAppSelector((state) => state.users.selectedUsers);
     const [openPopup, setOpenPopup] = useState(false);
     const [notify, setNotify] = useState({
         isOpen: false,
@@ -30,8 +32,7 @@ const Users: React.FC = () => {
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: '',
-        subTitle: '',
-        selectedUsers: [] as number[]
+        subTitle: ''
     });
 
     return (
@@ -51,7 +52,7 @@ const Users: React.FC = () => {
             <Popup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Add New User"
+                title={selectSelected.length > 0 ? 'Edit User' : 'Add New User'}
             >
                 <NewUserForm
                     setOpenPopup={setOpenPopup}

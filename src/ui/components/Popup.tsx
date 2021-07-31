@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import React, { ReactNode } from 'react';
+import { TSetStateBoolean } from '../../types';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -26,7 +27,7 @@ interface IProps {
     title: string;
     children: ReactNode;
     openPopup: boolean;
-    setOpenPopup: React.Dispatch<React.SetStateAction<boolean>>;
+    setOpenPopup: TSetStateBoolean;
 }
 
 const Popup: React.FC<IProps> = ({

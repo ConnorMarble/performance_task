@@ -1,22 +1,22 @@
-import React from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { setFilteredByDistrict, setDistrict } from "../../../redux/userSlice";
+import React from 'react';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { setFilteredByDistrict, setDistrict } from '../../../redux/userSlice';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         formControl: {
             margin: theme.spacing(1),
             minWidth: 120,
-            marginBottom: "32px",
+            marginBottom: '32px'
         },
         selectEmpty: {
-            marginTop: theme.spacing(2),
-        },
+            marginTop: theme.spacing(2)
+        }
     })
 );
 

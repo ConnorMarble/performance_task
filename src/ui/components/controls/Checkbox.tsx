@@ -34,7 +34,6 @@ const Checkbox: React.FC<IProps> = (props: IProps) => {
                         color="primary"
                         onChange={onChange}
                         checked={a || false}
-                        defaultChecked={a}
                         {...other}
                         {...(error && { error: true, helperText: error })}
                     />

@@ -13,7 +13,7 @@ import {
 } from '../../../types';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import getUsers from '../../../services/getUsers';
-import { setUsers } from '../../../redux/userSlice';
+import { setSelectedUsers, setUsers } from '../../../redux/userSlice';
 import getDistricts from '../../../services/getDistricts';
 import { setDistricts } from '../../../redux/districtSlice';
 import TableHeader from './TableHeader';
@@ -66,17 +66,13 @@ const Table: React.FC<IProps> = ({
     const selectByActive = useAppSelector(
         (state) => state.users.filterByActive
     );
+    const selectSelected = useAppSelector((state) => state.users.selectedUsers);
     const dispatch = useAppDispatch();
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof IUser>('id');
-    const [selected, setSelected] = useState<number[]>([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [userList, setUserList] = useState<IUser[]>(selectUsers);
-
-    useEffect(() => {
-        console.log('selected', selected);
-    }, [selected]);
 
     //Fetch the users and the districts and store them in Redux
     useEffect(() => {
@@ -89,7 +85,7 @@ const Table: React.FC<IProps> = ({
     //Watch for newly added users.
     useEffect(() => {
         setUserList(selectUsers);
-        setSelected([]);
+        dispatch(setSelectedUsers([]));
     }, [selectUsers]);
 
     //Handles filtering (Not sorting) of districts and active users
@@ -116,37 +112,37 @@ const Table: React.FC<IProps> = ({
     };
 
     //Handle clicking users
-    const isSelected = (id: number) => selected.indexOf(id) !== -1;
+    const isSelected = (id: number) => selectSelected.indexOf(id) !== -1;
 
     const handleSelectAllClick = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         if (event.target.checked) {
             const newSelecteds = selectUsers.map((n) => n.id);
-            setSelected(newSelecteds);
+            dispatch(setSelectedUsers(newSelecteds));
             return;
         }
-        setSelected([]);
+        dispatch(setSelectedUsers([]));
     };
 
     const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-        const selectedIndex = selected.indexOf(id);
+        const selectedIndex = selectSelected.indexOf(id);
         let newSelected: number[] = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, id);
+            newSelected = newSelected.concat(selectSelected, id);
         } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
+            newSelected = newSelected.concat(selectSelected.slice(1));
+        } else if (selectedIndex === selectSelected.length - 1) {
+            newSelected = newSelected.concat(selectSelected.slice(0, -1));
         } else if (selectedIndex > 0) {
             newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
+                selectSelected.slice(0, selectedIndex),
+                selectSelected.slice(selectedIndex + 1)
             );
         }
 
-        setSelected(newSelected);
+        dispatch(setSelectedUsers(newSelected));
     };
 
     //Handle pagination
@@ -170,8 +166,7 @@ const Table: React.FC<IProps> = ({
         setConfirmDialog({
             isOpen: true,
             title: 'Are you sure you want to delete this user?',
-            subTitle: "You can't undo this operation.",
-            selectedUsers: selected
+            subTitle: "You can't undo this operation."
         });
     };
 
@@ -179,7 +174,7 @@ const Table: React.FC<IProps> = ({
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <TableToolbar
-                    numSelected={selected.length}
+                    numSelected={selectSelected.length}
                     setOpenPopup={setOpenPopup}
                     deleteUsers={deleteUsers}
                 />
@@ -191,7 +186,7 @@ const Table: React.FC<IProps> = ({
                     >
                         <TableHeader
                             classes={classes}
-                            numSelected={selected.length}
+                            numSelected={selectSelected.length}
                             order={order}
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}

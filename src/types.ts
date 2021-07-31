@@ -29,8 +29,10 @@ export interface IDirection {
     direction: 'desc' | 'asc' | undefined;
 }
 
+export type TSetStateBoolean = React.Dispatch<React.SetStateAction<boolean>>;
+
 export interface IPopUp {
-    setOpenPopup: React.Dispatch<React.SetStateAction<boolean>>;
+    setOpenPopup: TSetStateBoolean;
 }
 
 export interface IHeadCell {
@@ -56,7 +58,6 @@ export type TSetConfirmDialog = React.Dispatch<
         isOpen: boolean;
         title: string;
         subTitle: string;
-        selectedUsers: number[];
     }>
 >;
 
@@ -64,7 +65,6 @@ export type TConfirmDialog = {
     isOpen: boolean;
     title: string;
     subTitle: string;
-    selectedUsers: number[];
 };
 
 export type TSetStateNumArray = React.Dispatch<React.SetStateAction<number[]>>;

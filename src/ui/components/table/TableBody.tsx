@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
     TableBody as MuiTableBody,
     TableCell,
@@ -30,9 +30,6 @@ const TableBody: React.FC<IProps> = ({
     handleClick,
     emptyRows
 }: IProps) => {
-    useEffect(() => {
-        console.log('Table Body Rendered');
-    }, [users]);
     return (
         <MuiTableBody>
             {stableSort(users, getComparator(order, orderBy))
@@ -67,13 +64,11 @@ const TableBody: React.FC<IProps> = ({
                                     scope="row"
                                     padding="none"
                                 >
-                                    {cell.id == 'active' ? (
-                                        <div style={{ textAlign: 'center' }}>
-                                            {row[cell.id] ? 'Yes' : 'No'}
-                                        </div>
-                                    ) : (
-                                        row[cell.id]
-                                    )}
+                                    {cell.id == 'active'
+                                        ? row[cell.id]
+                                            ? 'Yes'
+                                            : 'No'
+                                        : row[cell.id]}
                                 </TableCell>
                             ))}
                         </TableRow>

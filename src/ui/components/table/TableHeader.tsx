@@ -6,39 +6,39 @@ import {
     TableHead,
     TableRow,
     TableSortLabel,
-    Theme,
-} from "@material-ui/core";
-import React from "react";
-import { IHeadCell, IUser } from "../../../types";
+    Theme
+} from '@material-ui/core';
+import React from 'react';
+import { IHeadCell, IUser } from '../../../types';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: "90%",
+            width: '90%'
         },
         paper: {
-            width: "100%",
-            marginBottom: theme.spacing(2),
+            width: '100%',
+            marginBottom: theme.spacing(2)
         },
         table: {
             minWidth: 750,
-            maxHeight: "800px",
+            maxHeight: '800px'
         },
         visuallyHidden: {
             border: 0,
-            clip: "rect(0 0 0 0)",
+            clip: 'rect(0 0 0 0)',
             height: 1,
             margin: -1,
-            overflow: "hidden",
+            overflow: 'hidden',
             padding: 0,
-            position: "absolute",
+            position: 'absolute',
             top: 20,
-            width: 1,
-        },
+            width: 1
+        }
     })
 );
 
-type Order = "asc" | "desc";
+type Order = 'asc' | 'desc';
 
 interface IProps {
     classes: ReturnType<typeof useStyles>;
@@ -63,7 +63,7 @@ const TableHeader: React.FC<IProps> = (props: IProps) => {
         numSelected,
         rowCount,
         onRequestSort,
-        headCells,
+        headCells
     } = props;
     const createSortHandler =
         (property: keyof IUser) => (event: React.MouseEvent<unknown>) => {
@@ -80,27 +80,27 @@ const TableHeader: React.FC<IProps> = (props: IProps) => {
                         }
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                        inputProps={{ "aria-label": "select all desserts" }}
+                        inputProps={{ 'aria-label': 'select all desserts' }}
                     />
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={"left"}
-                        padding={headCell.disablePadding ? "none" : "normal"}
+                        align={'left'}
+                        padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : "asc"}
+                            direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
                         >
                             {headCell.label}
                             {orderBy === headCell.id ? (
                                 <span className={classes.visuallyHidden}>
-                                    {order === "desc"
-                                        ? "sorted descending"
-                                        : "sorted ascending"}
+                                    {order === 'desc'
+                                        ? 'sorted descending'
+                                        : 'sorted ascending'}
                                 </span>
                             ) : null}
                         </TableSortLabel>

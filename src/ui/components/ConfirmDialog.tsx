@@ -11,7 +11,7 @@ import {
 import { Controls } from './controls/Controls';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import { TConfirmDialog, TSetConfirmDialog, TSetNotify } from '../../types';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { deleteUser } from '../../redux/userSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -55,6 +55,7 @@ const ConfirmDialog: React.FC<IProps> = ({
 }: IProps) => {
     const classes = useStyles();
     const dispatch = useAppDispatch();
+    const selectSelected = useAppSelector((state) => state.users.selectedUsers);
 
     return (
         <Dialog open={confirmDialog.isOpen} classes={{ paper: classes.dialog }}>
@@ -83,17 +84,15 @@ const ConfirmDialog: React.FC<IProps> = ({
                     color="secondary"
                     type="button"
                     onClick={() => {
-                        confirmDialog.selectedUsers.map((user) =>
+                        selectSelected.map((user) =>
                             dispatch(deleteUser(user))
                         );
-                        //     setSelected([]);
                         setNotify({
                             isOpen: true,
                             message: 'Deleted Successfully!',
                             type: 'error'
                         });
                         setConfirmDialog({ ...confirmDialog, isOpen: false });
-                        // }
                     }}
                 />
             </DialogActions>

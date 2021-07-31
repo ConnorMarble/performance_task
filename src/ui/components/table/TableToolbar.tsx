@@ -9,14 +9,12 @@ import {
     IconButton
 } from '@material-ui/core';
 import { Add, Settings } from '@material-ui/icons';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { IPopUp } from '../../../types';
 import DistrictFilter from './DistrictFilter';
 import clsx from 'clsx';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Controls } from '../controls/Controls';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { deleteUser } from '../../../redux/userSlice';
 
 const useToolbarStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,16 +25,16 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
         highlight:
             theme.palette.type === 'light'
                 ? {
-                      color: theme.palette.secondary.main,
-                      backgroundColor: lighten(
-                          theme.palette.secondary.light,
-                          0.85
-                      )
-                  }
+                    color: theme.palette.secondary.main,
+                    backgroundColor: lighten(
+                        theme.palette.secondary.light,
+                        0.85
+                    )
+                }
                 : {
-                      color: theme.palette.text.primary,
-                      backgroundColor: theme.palette.secondary.dark
-                  },
+                    color: theme.palette.text.primary,
+                    backgroundColor: theme.palette.secondary.dark
+                },
         title: {
             flex: '1 1 100%'
         }
@@ -90,8 +88,8 @@ const TableToolbar: React.FC<IProps> = ({
                         </div>
                     </Tooltip>
                     <Tooltip title="Edit user">
-                        <div onClick={() => deleteUsers()}>
-                            <IconButton onClick={() => setOpenPopup(true)}>
+                        <div onClick={() => setOpenPopup(true)}>
+                            <IconButton>
                                 <Settings />
                             </IconButton>
                         </div>

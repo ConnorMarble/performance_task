@@ -1,6 +1,6 @@
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import { Snackbar, makeStyles } from '@material-ui/core';
-import { Alert, AlertProps, Color } from '@material-ui/lab';
+import { Alert } from '@material-ui/lab';
 import { TNotify, TSetNotify } from '../../types';
 
 const useStyles = makeStyles((theme) => ({
