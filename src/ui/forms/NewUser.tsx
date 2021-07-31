@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { IUser, TSetNotify } from '../../types';
+import { IUser, TSetNotify, TSetStateBoolean } from '../../types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '../../validation/yup.schema';
 import { Grid, Box, makeStyles } from '@material-ui/core';
@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface IProps {
-    setOpenPopup: React.Dispatch<React.SetStateAction<boolean>>;
+    setOpenPopup: TSetStateBoolean;
     setNotify: TSetNotify;
 }
 

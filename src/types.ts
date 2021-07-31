@@ -68,3 +68,20 @@ export type TConfirmDialog = {
 };
 
 export type TSetStateNumArray = React.Dispatch<React.SetStateAction<number[]>>;
+
+export type TChaneEvent = (event: React.ChangeEvent<HTMLInputElement>) => void;
+
+export type TMouseEventUnkown = React.MouseEvent<unknown>;
+
+export type TBtnColor =
+    | 'inherit'
+    | 'default'
+    | 'primary'
+    | 'secondary'
+    | undefined;
+
+export type TBtnSize = 'medium' | 'large' | 'small' | undefined;
+
+export type TBtnVariant = 'text' | 'outlined' | 'contained' | undefined;
+
+export type TBtnType = 'button' | 'submit' | 'reset' | undefined;

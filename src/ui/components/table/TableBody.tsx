@@ -6,7 +6,7 @@ import {
     Checkbox
 } from '@material-ui/core';
 import { getComparator, stableSort } from '../../../helpers/sortingFunctions';
-import { IUser, Order } from '../../../types';
+import { IUser, Order, TMouseEventUnkown } from '../../../types';
 import { headCells } from './headerCells';
 
 interface IProps {
@@ -16,7 +16,7 @@ interface IProps {
     page: number;
     rowsPerPage: number;
     isSelected(id: number): boolean;
-    handleClick(event: React.MouseEvent<unknown>, id: number): void;
+    handleClick(event: TMouseEventUnkown, id: number): void;
     emptyRows: number;
 }
 

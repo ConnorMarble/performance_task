@@ -9,7 +9,12 @@ import {
     Theme
 } from '@material-ui/core';
 import React from 'react';
-import { IHeadCell, IUser } from '../../../types';
+import {
+    IHeadCell,
+    IUser,
+    TChaneEvent,
+    TMouseEventUnkown
+} from '../../../types';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,11 +48,8 @@ type Order = 'asc' | 'desc';
 interface IProps {
     classes: ReturnType<typeof useStyles>;
     numSelected: number;
-    onRequestSort: (
-        event: React.MouseEvent<unknown>,
-        property: keyof IUser
-    ) => void;
-    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onRequestSort: (event: TMouseEventUnkown, property: keyof IUser) => void;
+    onSelectAllClick: TChaneEvent;
     order: Order;
     orderBy: string;
     rowCount: number;

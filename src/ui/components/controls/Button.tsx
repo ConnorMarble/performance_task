@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button as MuiButton, makeStyles } from '@material-ui/core';
+import { TBtnColor, TBtnSize, TBtnType, TBtnVariant } from '../../../types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -12,11 +13,11 @@ const useStyles = makeStyles((theme) => ({
 
 interface IProps {
     text: string;
-    size?: 'medium' | 'large' | 'small' | undefined;
-    color?: 'inherit' | 'default' | 'primary' | 'secondary' | undefined;
-    variant?: 'text' | 'outlined' | 'contained' | undefined;
+    size?: TBtnSize;
+    color?: TBtnColor;
+    variant?: TBtnVariant;
     onClick(): void;
-    type: 'button' | 'submit' | 'reset' | undefined;
+    type: TBtnType;
 }
 
 const Button: React.FC<IProps> = (props: IProps) => {
